@@ -1,0 +1,10 @@
+{
+    "Time": {
+        "CooldownSeconds": 1800,
+        "MaxSeconds": 600
+    },
+    "Configuration": {
+        "LimitedSites": ["https://www.youtube.com/shorts/"],
+        "RedirectionOptions": ["https://www.google.com"]
+    }
+}

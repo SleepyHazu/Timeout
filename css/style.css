@@ -1,0 +1,38 @@
+body, html {
+    background-color: rgb(26, 29, 44);
+}
+
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    color: white;
+}
+
+main {
+    display: flex;
+
+    justify-content: center;
+    justify-items: center;
+
+    width: 590px;
+}
+
+p {
+    padding: 5px 5px 5px 5px;
+    background-color: rgb(34, 40, 78);
+    border-radius: 12px;
+
+    color: #6486ff;
+}
+
+#website {
+    color: rgb(135, 177, 255);
+}
+
+#available {
+    color: rgb(102, 255, 163);
+}
+
+#cooldown {
+    color: rgb(255, 102, 122);
+}
