@@ -14,7 +14,10 @@ main {
     justify-content: center;
     justify-items: center;
 
-    width: 590px;
+    flex-direction: column;
+
+    width: 32rem;
+    padding-bottom: 1rem;
 }
 
 p {
@@ -22,6 +25,7 @@ p {
     background-color: rgb(34, 40, 78);
     border-radius: 12px;
 
+    margin-bottom: -0.15rem;
     color: #6486ff;
 }
 

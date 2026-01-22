@@ -4,8 +4,28 @@ var sites = {}
 var cooldowns = {}
 
 var currentUrl = ""
+var initialized = false
+
+async function startMonitoring() {
+    const contexts = await chrome.runtime.getContexts({ contextTypes: ["OFFSCREEN_DOCUMENT"] })
+
+    if(contexts.length > 0) return
+
+    try {
+        await chrome.offscreen.createDocument({
+            url: "offscreen.html",
+            reasons: ["LOCAL_STORAGE"],
+            justification: "tic"
+        })
+    } catch(err) {
+        console.log(err)
+    }
+}
 
 async function initExtension() {
+    if(initialized) return
+    initialized = true
+
     try {
         const response = await fetch(chrome.runtime.getURL("data.json"))
         extData = await response.json()
@@ -20,7 +40,7 @@ async function initExtension() {
             cooldowns[current] = false
         })
 
-        startInterval()
+        await startMonitoring()
 
     } catch(err) {
         console.log(err)
@@ -29,16 +49,25 @@ async function initExtension() {
 
 async function checkCurrentTab() {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-    return tab.url
+    return tab ? tab.url : null
 }
 
-function startInterval() {
-    setInterval(async () => {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+    if(request.action === "GetData") {
+        sendResponse({
+            Sites: sites,
+            Cooldowns: cooldowns,
+            MaxSeconds: extData ? extData["Time"]["MaxSeconds"] : {}
+        })
+
+        return true
+
+    } else if(request.action === "tick") {
         currentUrl = await checkCurrentTab()
 
         if(currentUrl) {
             currentUrl = (extData.Configuration.LimitedSites.some((current) => currentUrl.startsWith(current))) ? currentUrl : "|"
-        }
+        } else return
 
         for(const [key, value] of Object.entries(sites)) {
             if(cooldowns[key]) {
@@ -72,21 +101,14 @@ function startInterval() {
                 cooldowns[key] = true
             }
         }
-    }, 1000);
-}
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.action === "GetData") {
-        sendResponse({
-            Sites: sites,
-            Cooldowns: cooldowns,
-            MaxSeconds: extData["Time"]["MaxSeconds"]
-        })
-
-        return true
+        sendResponse({ status: "ok" })
     }
     
     return true
 })
+
+chrome.runtime.onStartup.addListener(initExtension)
+chrome.runtime.onInstalled.addListener(initExtension)
 
 initExtension()

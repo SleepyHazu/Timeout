@@ -11,6 +11,8 @@ const calculateTime = (seconds) => {
 
 const renderElements = () => {
     chrome.runtime.sendMessage({action: "GetData"}, (response) => {
+        if(!response) return
+        
         for(const [key, value] of Object.entries(response.Sites)) {
             var reference = document.getElementById(key)
 

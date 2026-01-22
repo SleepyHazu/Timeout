@@ -3,7 +3,7 @@
     "name": "Timeout",
     "version": "1.0.0",
     "description": "Limit the time you can spend on certain pages and adds a cooldown.",
-    "permissions": ["tabs", "scripting", "storage"],
+    "permissions": ["tabs", "webNavigation", "storage", "alarms", "offscreen"],
     "background": {
         "service_worker": "js/background.js"
     },

@@ -4,7 +4,7 @@
         "MaxSeconds": 600
     },
     "Configuration": {
-        "LimitedSites": ["https://www.youtube.com/shorts/"],
+        "LimitedSites": ["https://www.youtube.com/shorts/", "https://www.instagram.com/reels/"],
         "RedirectionOptions": ["https://www.google.com"]
     }
 }
